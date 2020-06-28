@@ -6,7 +6,7 @@ import sys
 from operator import itemgetter
 
 sh=win32com.client.gencache.EnsureDispatch('Shell.Application',0)
-ns = sh.NameSpace(r'E:\Music\Alternative(Indie too!)')
+ns = sh.NameSpace(r'E:\Music\Rap & Hip-Hop')
 colnum = 0
 columns = []
 while True:
@@ -25,7 +25,6 @@ def animate():
         sys.stdout.write('\rloading ' + c)
         sys.stdout.flush()
         time.sleep(0.1)
-    sys.stdout.write('\rDone!     ')
 
 t = threading.Thread(target=animate)
 t.start()
@@ -36,9 +35,10 @@ for item in ns.Items():
         colval=ns.GetDetailsOf(item, colnum)
         if colval:
             if(columns[colnum] == "Authors"):
-                names= colval.split(',')
+                colval = colval.replace(";",",").replace("&",",").replace("feat.", ",")
+                names = colval.split(',')
                 for name in names:
-                    authors.append(name)
+                    authors.append(name.rstrip().lstrip())
 
 #long process here
 time.sleep(10)
@@ -48,7 +48,7 @@ countedOrders = [[x,authors.count(x)] for x in set(authors)]
 countedOrders = sorted(countedOrders, key=itemgetter(1), reverse=True)
 
 for item in countedOrders:
-    output = '\n' + 'Artist:' + item[0] + " | Number Of Tracks:" + str(item[1]) + '\n'
+    output = '\n\n' + item[0] + " | " + str(item[1]) + '\n'
     print(output)
 
             
